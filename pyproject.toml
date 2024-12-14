@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "bfme2-speech-recognition"
+description = ""
+authors = ["Jan Dittrich <mail@jand.one>"]
+readme = "README.md"
+package-mode = false
+
+
+[tool.poetry.dependencies]
+python = "^3.13"
+SpeechRecognition = "^3.12"
+soundfile = "^0.12"
+numpy = "^2.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
