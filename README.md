@@ -15,3 +15,5 @@ audio
 ```
 
 2. Run `fix.py`
+
+This will fix all .wav files to make them playable in all common audio software.
