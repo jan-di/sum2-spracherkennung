@@ -12,9 +12,16 @@
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   </head>
+  <form>
+    <div class="form-group">
+        <label for="exampleSearchtext">Text Suchbegriff</label>
+        <input type="text" class="form-control" id="searchText" aria-describedby="searchTextHelp" placeholder="">
+        <small id="searchTextHelp" class="form-text text-muted">Suchbegriff der im transkribierten Text gesucht wird.</small>
+    </div>
+  </form>
   <body class="container-fluid">
     <audio id="audio-player" class="position-static" withh=300 height=100 src=""></audio>
-    <table class="table">
+    <table id="file-table" class="table">
       <thead>
         <tr>
           <th scope="col">#</th>
@@ -29,7 +36,9 @@
       </thead>
       <tbody>
         {% for file_path, file in audio.files.items() |sort(attribute='1.file_name') %}
-        <tr>
+        <tr
+            data-text="{{ file.google_transcribed_text | default('') }}"
+        >
             <th scope="row">{{ loop.index }}</th>
             <td>
             {% if file.source_game in ("bfme2", "rotwk") %}<img src="assets/{{ file.source_game }}.png" alt="{{ file.source_game }}" title="{{ file.source_game }}" width="25" height="25">
@@ -70,6 +79,29 @@
             audioPlayer.src = audio;
             audioPlayer.play();
         }
+
+        const searchTextInput = document.getElementById('searchText');
+        const inputHandler = function(e) {
+            if (e.key === "Enter") {
+                fileTable = document.getElementById('file-table');
+                searchText = e.target.value.toLowerCase();
+
+                for (let row of fileTable.rows) {
+                    if (row.rowIndex === 0) {
+                        continue;
+                    }
+
+                    let text = row.getAttribute('data-text').toLowerCase();
+                    if (text.includes(searchText)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        searchTextInput.addEventListener('keyup', inputHandler);
     </script>
   </body>
 </html>
